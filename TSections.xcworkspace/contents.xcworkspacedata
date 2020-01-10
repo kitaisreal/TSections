@@ -5,6 +5,6 @@
       location = "group:Example-iOS/Example-iOS.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:/Users/mkita/Documents/LibraryTemplate/TSections.xcodeproj">
+      location = "group:TSections.xcodeproj">
    </FileRef>
 </Workspace>

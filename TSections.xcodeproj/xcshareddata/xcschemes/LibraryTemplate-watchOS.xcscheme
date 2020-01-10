@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E407F87823B88E7E002D360C"
-               BuildableName = "LibraryTemplate.framework"
+               BuildableName = "TSections.framework"
                BlueprintName = "TSections-watchOS"
                ReferencedContainer = "container:TSections.xcodeproj">
             </BuildableReference>
@@ -51,7 +51,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E407F87823B88E7E002D360C"
-            BuildableName = "LibraryTemplate.framework"
+            BuildableName = "TSections.framework"
             BlueprintName = "TSections-watchOS"
             ReferencedContainer = "container:TSections.xcodeproj">
          </BuildableReference>

@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E407F86B23B88E54002D360C"
-               BuildableName = "LibraryTemplate.framework"
+               BuildableName = "TSections.framework"
                BlueprintName = "TSections-iOS"
                ReferencedContainer = "container:TSections.xcodeproj">
             </BuildableReference>
@@ -33,7 +33,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E407F8A823B899AD002D360C"
-               BuildableName = "LibraryTemplateTests-iOS.xctest"
+               BuildableName = "TSectionsTests-iOS.xctest"
                BlueprintName = "TSectionsTests-iOS"
                ReferencedContainer = "container:TSections.xcodeproj">
             </BuildableReference>
@@ -61,7 +61,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E407F86B23B88E54002D360C"
-            BuildableName = "LibraryTemplate.framework"
+            BuildableName = "TSections.framework"
             BlueprintName = "TSections-iOS"
             ReferencedContainer = "container:TSections.xcodeproj">
          </BuildableReference>
