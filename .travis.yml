@@ -1,0 +1,70 @@
+language: objective-c
+
+os: osx
+
+osx_image: xcode11.1
+
+stages:
+  - name: test
+
+jobs:
+  include:
+    - stage: test
+      name: Run Unit Tests (iOS, xCode 11.1)
+      script: 
+          - XCODE_SCHEME=TSections-iOS
+            XCODE_SDK=iphonesimulator
+            XCODE_ACTION="build-for-testing test-without-building"
+            XCODE_DESTINATION="platform=iOS Simulator,name=iPhone 11 Pro"
+            scripts/build.sh
+    - stage: test
+      name: Run Unit Tests (macOS, xCode 11.1)
+      script:
+          - XCODE_SCHEME=TSections-macOS
+            XCODE_SDK=macosx
+            XCODE_ACTION="build test"
+            XCODE_DESTINATION="arch=x86_64"
+            scripts/build.sh
+    - stage: test
+      name: Run Unit Tests (tvOS, xCode 11.1)
+      script:
+          - XCODE_SCHEME=TSections-tvOS
+            XCODE_SDK=appletvsimulator
+            XCODE_ACTION="build-for-testing test-without-building"
+            XCODE_DESTINATION="platform=tvOS Simulator,name=Apple TV"
+            scripts/build.sh
+    - stage: test
+      name: Build (watchOS, xCode 11.1)
+      script:
+          - XCODE_SCHEME=TSections-watchOS
+            XCODE_SDK=watchsimulator
+            XCODE_ACTION=build
+            XCODE_DESTINATION="platform=watchOS Simulator,name=Apple Watch Series 5 - 44mm"
+            scripts/build.sh
+    - stage: test
+      name: Cocoa pods library lint
+      script:
+        - pod lib lint TSections.podspec
+    - stage: test
+      name: Swift PM library build test
+      script:
+        - swift --version
+        - swift build
+        - swift test
+    - stage: test
+      name: Carthage library build
+      script:
+        - carthage build --no-skip-current
+    - stage: test
+      name: Example-iOS application build
+      script:
+        - XCODE_SCHEME=Example-iOS
+          XCODE_SDK=iphonesimulator
+          XCODE_ACTION="build"
+          XCODE_DESTINATION="platform=iOS Simulator,name=iPhone 11 Pro"
+          scripts/build.sh
+    - stage: test
+      name: Swift Lint Validation
+      script:
+        - swiftlint version
+        - swiftlint lint --strict
