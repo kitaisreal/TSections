@@ -1,5 +1,5 @@
 Pod::Spec.new do |s|
-  s.name             = 'LibraryTemplate'
+  s.name             = 'TSections'
   s.version          = '0.0.1'
   s.summary          = 'TSections'
   s.description      = <<-DESC
