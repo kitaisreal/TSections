@@ -20,7 +20,6 @@ struct ItemWithOffset<T> {
     }
 }
 
-
 struct ArrayUtils {
 
     static func findItem<T>(items: [T], itemIndexToFind: Int, itemCount: (T) -> Int) -> ItemWithOffset<T> {
@@ -32,7 +31,7 @@ struct ArrayUtils {
             let countOfElementsInItem = itemCount(item)
             let itemEndIndex = currentItemIndex + (countOfElementsInItem - 1)
 
-            if currentItemIndex == itemIndexToFind || itemIndexToFind <= itemEndIndex  {
+            if currentItemIndex == itemIndexToFind || itemIndexToFind <= itemEndIndex {
                 let itemIndexOffsetInCollection = itemIndexToFind - currentItemIndex
                 resultItem = ItemWithOffset(item: item, offset: itemIndexOffsetInCollection)
                 break

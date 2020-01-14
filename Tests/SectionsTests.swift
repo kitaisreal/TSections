@@ -41,7 +41,7 @@ class SectionsTests: XCTestCase {
         let sections: Sections<TestSection, TestItem> = [
             Section(section: .basic(nil), items: []),
             Section(section: .collection(["F", "S"]), items: []),
-            Section(section: .collection(["F", "S"]), items: []),
+            Section(section: .collection(["F", "S"]), items: [])
         ]
         let actual = sections.count
         let expected = 5
@@ -249,4 +249,3 @@ class SectionsTests: XCTestCase {
 //        XCTAssertEqual(actualCollectionIndexSet, expectedCollectionIndexSet)
 //    }
 }
-

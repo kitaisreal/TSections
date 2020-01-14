@@ -14,6 +14,4 @@ struct ReflectionUtils {
         let mirror = Mirror(reflecting: value)
         return mirror.children.first?.value as? _SectionsArray
     }
-
 }
-

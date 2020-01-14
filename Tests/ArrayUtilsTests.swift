@@ -42,10 +42,10 @@ class ArrayUtilsTests: XCTestCase {
     func testFindItemBasic() {
         let items: [ArrayUtilEnum] = (0..<5).map { ArrayUtilEnum.item(1, String($0)) }
 
-        for i in 0..<5 {
-            let item = ArrayUtils.findItem(items: items, itemIndexToFind: i, itemCount: { $0.countOfElements })
+        for index in 0..<5 {
+            let item = ArrayUtils.findItem(items: items, itemIndexToFind: index, itemCount: { $0.countOfElements })
             XCTAssertEqual(item.offset, 0)
-            XCTAssertEqual(item.item, ArrayUtilEnum.item(1, String(i)))
+            XCTAssertEqual(item.item, ArrayUtilEnum.item(1, String(index)))
         }
     }
 
@@ -62,10 +62,10 @@ class ArrayUtilsTests: XCTestCase {
         XCTAssertEqual(firstItem.item, ArrayUtilEnum.item(1, "1"))
         XCTAssertEqual(firstItem.offset, 0)
 
-        for i in firstBasicItem.countOfElements..<collectionCount+firstBasicItem.countOfElements {
-            let itemInCollection = ArrayUtils.findItem(items: items, itemIndexToFind: i, itemCount: { $0.countOfElements })
+        for index in firstBasicItem.countOfElements..<collectionCount+firstBasicItem.countOfElements {
+            let itemInCollection = ArrayUtils.findItem(items: items, itemIndexToFind: index, itemCount: { $0.countOfElements })
             XCTAssertEqual(itemInCollection.item, collectionItem)
-            XCTAssertEqual(itemInCollection.offset, i - firstBasicItem.countOfElements)
+            XCTAssertEqual(itemInCollection.offset, index - firstBasicItem.countOfElements)
         }
     }
 
@@ -82,10 +82,10 @@ class ArrayUtilsTests: XCTestCase {
         XCTAssertEqual(firstItem.item, firstBasicItem)
         XCTAssertEqual(firstItem.offset, 0)
 
-        for i in 0..<collectionCount {
-            let itemInCollection = ArrayUtils.findItem(items: items, itemIndexToFind: i, itemCount: { $0.countOfElements })
+        for index in 0..<collectionCount {
+            let itemInCollection = ArrayUtils.findItem(items: items, itemIndexToFind: index, itemCount: { $0.countOfElements })
             XCTAssertEqual(itemInCollection.item, collectionItem)
-            XCTAssertEqual(itemInCollection.offset, i)
+            XCTAssertEqual(itemInCollection.offset, index)
         }
     }
 
@@ -107,10 +107,10 @@ class ArrayUtilsTests: XCTestCase {
         XCTAssertEqual(lastItem.item, basicItem)
         XCTAssertEqual(lastItem.offset, 0)
 
-        for i in basicItem.countOfElements..<collectionCount+basicItem.countOfElements {
-            let itemInCollection = ArrayUtils.findItem(items: items, itemIndexToFind: i, itemCount: { $0.countOfElements })
+        for index in basicItem.countOfElements..<collectionCount+basicItem.countOfElements {
+            let itemInCollection = ArrayUtils.findItem(items: items, itemIndexToFind: index, itemCount: { $0.countOfElements })
             XCTAssertEqual(itemInCollection.item, collectionItem)
-            XCTAssertEqual(itemInCollection.offset, i-basicItem.countOfElements)
+            XCTAssertEqual(itemInCollection.offset, index-basicItem.countOfElements)
         }
     }
 
@@ -123,16 +123,16 @@ class ArrayUtilsTests: XCTestCase {
 
         let items: [ArrayUtilEnum] = [firstCollectionItem, secondCollectionItem]
 
-        for i in 0..<firstCollectionItem.countOfElements {
-            let itemInCollection = ArrayUtils.findItem(items: items, itemIndexToFind: i, itemCount: { $0.countOfElements })
+        for index in 0..<firstCollectionItem.countOfElements {
+            let itemInCollection = ArrayUtils.findItem(items: items, itemIndexToFind: index, itemCount: { $0.countOfElements })
             XCTAssertEqual(itemInCollection.item, firstCollectionItem)
-            XCTAssertEqual(itemInCollection.offset, i)
+            XCTAssertEqual(itemInCollection.offset, index)
         }
 
-        for i in firstCollectionItem.countOfElements..<secondCollectionItem.countOfElements+firstCollectionItem.countOfElements {
-            let itemInCollection = ArrayUtils.findItem(items: items, itemIndexToFind: i, itemCount: { $0.countOfElements })
+        for index in firstCollectionItem.countOfElements..<secondCollectionItem.countOfElements+firstCollectionItem.countOfElements {
+            let itemInCollection = ArrayUtils.findItem(items: items, itemIndexToFind: index, itemCount: { $0.countOfElements })
             XCTAssertEqual(itemInCollection.item, secondCollectionItem)
-            XCTAssertEqual(itemInCollection.offset, i-firstCollectionItem.countOfElements)
+            XCTAssertEqual(itemInCollection.offset, index-firstCollectionItem.countOfElements)
         }
     }
 
