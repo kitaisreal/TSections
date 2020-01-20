@@ -10,18 +10,35 @@ import Foundation
 
 public struct Section<S, T> {
 
-    public let section: S
+    public let value: S
 
     public let items: [T]
 
     public let count: Int
 
-    public init(section: S, items: [T]) {
-        self.section = section
+    public init(value: S, items: [T]) {
+        self.value = value
         self.items = items
         self.count = items.map({ ReflectionUtils.getSectionsArrayFromEnumIfExists(value: $0)?.count ?? 1 }).reduce(0, +)
     }
 
+}
+
+public extension Section {
+
+    @inline(__always)
+    subscript(index: Int) -> T {
+        return item(at: index)
+    }
+
+    func item(at index: Int) -> T {
+        let itemWithOffset = ArrayUtils.findItem(items: items,
+                                   itemIndexToFind: index,
+                                   itemCount: { ReflectionUtils.getSectionsArrayFromEnumIfExists(value: $0)?.count ?? 1 })
+
+        ReflectionUtils.getSectionsArrayFromEnumIfExists(value: itemWithOffset.item)?.updateItem(with: itemWithOffset.offset)
+        return itemWithOffset.item
+    }
 }
 
 public extension Section where T: Equatable {

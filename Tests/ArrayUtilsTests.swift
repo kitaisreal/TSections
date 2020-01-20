@@ -39,6 +39,8 @@ class ArrayUtilsTests: XCTestCase {
         }
     }
 
+    // MARK: Find item tests
+
     func testFindItemBasic() {
         let items: [ArrayUtilEnum] = (0..<5).map { ArrayUtilEnum.item(1, String($0)) }
 
@@ -135,6 +137,8 @@ class ArrayUtilsTests: XCTestCase {
             XCTAssertEqual(itemInCollection.offset, index-firstCollectionItem.countOfElements)
         }
     }
+
+    // MARK: Find indexes tests
 
     func testFindIndexesBasic() {
         let firstItem: ArrayUtilEnum = .item(1, "1")

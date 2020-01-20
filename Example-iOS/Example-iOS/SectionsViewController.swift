@@ -38,13 +38,13 @@ enum DemoItem {
 class SectionsViewController: UIViewController {
 
     private lazy var sections: Sections<DemoSections, DemoItem> = [
-        Section(section: .headerSection, items: [.valueCell("Header Section")]),
-        Section(section: .subheaderSection(["Subheader First Header", "Subheader Second Header"]),
+        Section(value: .headerSection, items: [.valueCell("Header Section")]),
+        Section(value: .subheaderSection(["Subheader First Header", "Subheader Second Header"]),
                 items: [.valueCell("Subheader Section")]),
-        Section(section: .mainSection, items: [.valueCell("Main Section Begin"),
+        Section(value: .mainSection, items: [.valueCell("Main Section Begin"),
                                                .collectionCell(["First", "Second", "Third"]),
                                                .valueCell("Main Section End")]),
-        Section(section: .footerSection, items: [.valueCell("Footer Section")])
+        Section(value: .footerSection, items: [.valueCell("Footer Section")])
     ]
 
     private let tableView: UITableView = UITableView()
@@ -101,7 +101,7 @@ extension SectionsViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let item = sections[indexPath]
+        let item = sections[indexPath].item
 
         let resultCell: UITableViewCell
         switch item {
@@ -121,7 +121,7 @@ extension SectionsViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let section = sections.section(at: indexPath.section).section
+        let section = sections.section(at: indexPath.section).value
         let item = sections[indexPath]
 
         let resultHeight: CGFloat
@@ -146,7 +146,7 @@ extension SectionsViewController: UITableViewDelegate, UITableViewDataSource {
 
         let resultView: UIView?
 
-        if case .subheaderSection(let value) = section.section {
+        if case .subheaderSection(let value) = section.value {
             let headerFooter: SectionItemTableHeaderView! = tableView.dequeueReusableHeaderFooterView(withIdentifier: Constants.sectionHeaderReuseIdentifier) as? SectionItemTableHeaderView
             headerFooter.updateWithText(text: value.item)
             resultView = headerFooter
@@ -162,7 +162,7 @@ extension SectionsViewController: UITableViewDelegate, UITableViewDataSource {
 
         let resultHeight: CGFloat
 
-        if case .subheaderSection = section.section {
+        if case .subheaderSection = section.value {
             resultHeight = 48.0
         } else {
             resultHeight = 0.0

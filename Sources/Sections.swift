@@ -8,9 +8,9 @@
 
 import Foundation
 #if os(macOS)
-import AppKit
+import struct AppKit.IndexPath
 #else
-import UIKit
+import struct UIKit.IndexPath
 #endif
 
 public struct Sections<S, T>: ExpressibleByArrayLiteral {
@@ -21,7 +21,7 @@ public struct Sections<S, T>: ExpressibleByArrayLiteral {
 
     public init(sections: [Section<S, T>]) {
         self.sections = sections
-        self.count = sections.map({ ReflectionUtils.getSectionsArrayFromEnumIfExists(value: $0.section)?.count ?? 1 }).reduce(0, +)
+        self.count = sections.map({ ReflectionUtils.getSectionsArrayFromEnumIfExists(value: $0.value)?.count ?? 1 }).reduce(0, +)
     }
 
     public init(arrayLiteral elements: Section<S, T>...) {
@@ -40,27 +40,32 @@ public extension Sections {
     func section(at index: Int) -> Section<S, T> {
         let sectionWithOffset = ArrayUtils.findItem(items: sections,
                             itemIndexToFind: index,
-                            itemCount: { ReflectionUtils.getSectionsArrayFromEnumIfExists(value: $0.section)?.count ?? 1 })
+                            itemCount: { ReflectionUtils.getSectionsArrayFromEnumIfExists(value: $0.value)?.count ?? 1 })
 
-        ReflectionUtils.getSectionsArrayFromEnumIfExists(value: sectionWithOffset.item.section)?.updateItem(with: sectionWithOffset.offset)
+        ReflectionUtils.getSectionsArrayFromEnumIfExists(value: sectionWithOffset.item.value)?.updateItem(with: sectionWithOffset.offset)
 
         return sectionWithOffset.item
     }
 
 }
 
+public struct ItemInSection<S, T> {
+
+    public let item: T
+
+    public let section: Section<S, T>
+
+    init(item: T, section: Section<S, T>) {
+        self.item = item
+        self.section = section
+    }
+}
+
 public extension Sections {
 
-    struct ItemInSection<S, T> {
-
-        public let item: T
-
-        public let section: Section<S, T>
-
-        init(item: T, section: Section<S, T>) {
-            self.item = item
-            self.section = section
-        }
+    @inline(__always)
+    subscript(indexPath: IndexPath) -> ItemInSection<S, T> {
+        return itemInSection(at: indexPath)
     }
 
     func itemInSection(at indexPath: IndexPath) -> ItemInSection<S, T> {
@@ -68,28 +73,10 @@ public extension Sections {
         let itemIndexToFind = indexPath.item
 
         let sectionToFind = section(at: sectionIndexToFind)
-        let itemWithOffset = ArrayUtils.findItem(items: sectionToFind.items,
-                                       itemIndexToFind: itemIndexToFind,
-                                       itemCount: { ReflectionUtils.getSectionsArrayFromEnumIfExists(value: $0)?.count ?? 1 })
+        let item = sectionToFind.item(at: itemIndexToFind)
 
-        ReflectionUtils.getSectionsArrayFromEnumIfExists(value: itemWithOffset.item)?.updateItem(with: itemWithOffset.offset)
-
-        return ItemInSection(item: itemWithOffset.item, section: sectionToFind)
+        return ItemInSection(item: item, section: sectionToFind)
     }
-}
-
-public extension Sections {
-
-    @inline(__always)
-    subscript(indexPath: IndexPath) -> T {
-        return item(at: indexPath)
-    }
-
-    @inline(__always)
-    func item(at indexPath: IndexPath) -> T {
-        return itemInSection(at: indexPath).item
-    }
-
 }
 
 public extension Sections where S: Equatable {
@@ -108,7 +95,7 @@ public extension Sections where S: Equatable {
 
     @inline(__always)
     func indexes(of sectionToFind: S) -> [Int]? {
-        return ArrayUtils.findIndexes(items: sections.map { $0.section },
+        return ArrayUtils.findIndexes(items: sections.map { $0.value },
                                       itemToFind: sectionToFind,
                                       itemCount: { ReflectionUtils.getSectionsArrayFromEnumIfExists(value: $0)?.count ?? 1 })
     }
@@ -121,7 +108,7 @@ public extension Sections where S: Equatable, T: Equatable {
 
         var indexPaths: [IndexPath]?
         for section in sections {
-            let sectionCount: Int = ReflectionUtils.getSectionsArrayFromEnumIfExists(value: section.section)?.count ?? 1
+            let sectionCount: Int = ReflectionUtils.getSectionsArrayFromEnumIfExists(value: section.value)?.count ?? 1
 
             if let indexesInSection = section.indexes(of: item) {
                 indexPaths = indexesInSection.map { IndexPath(item: $0, section: currentSectionIndex) }

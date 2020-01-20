@@ -18,7 +18,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window.rootViewController = SectionsViewController()
         window.makeKeyAndVisible()
         self.window = window
-        
         return true
     }
 
