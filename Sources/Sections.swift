@@ -103,16 +103,15 @@ public extension Sections where S: SectionEquatable, T: SectionEquatable {
 
     func indexPaths(of item: T) -> [IndexPath]? {
         var currentSectionIndex: Int = 0
-
         var indexPaths: [IndexPath]?
-        for section in sections {
-            let sectionCount: Int = ReflectionUtils.getSectionsArrayFromEnumIfExists(value: section.value)?.count ?? 1
 
+        for section in sections {
             if let indexesInSection = section.indexes(of: item) {
                 indexPaths = indexesInSection.map { IndexPath(item: $0, section: currentSectionIndex) }
                 break
             }
 
+            let sectionCount: Int = ReflectionUtils.getSectionsArrayFromEnumIfExists(value: section.value)?.count ?? 1
             currentSectionIndex += sectionCount
         }
 

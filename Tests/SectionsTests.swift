@@ -326,7 +326,7 @@ class SectionsTests: XCTestCase {
 
     // MARK: Indexes of section tests
 
-    func testSectionIndexesBasic() {
+    func testIndexesOfSectionBasic() {
         let firstSection: TestSection = .basic("1")
         let secondSection: TestSection = .basic("2")
 
@@ -352,7 +352,7 @@ class SectionsTests: XCTestCase {
         XCTAssertEqual(secondItemIndexSetActual, secondItemIndexSetExpected)
     }
 
-    func testSectionIndexesNotExists() {
+    func testIndexesOfSectionNotExists() {
         let firstSection: TestSection = .basic("1")
         let secondSection: TestSection = .basic("2")
 
@@ -369,7 +369,7 @@ class SectionsTests: XCTestCase {
         XCTAssertEqual(secondItemIndexSetActual, secondItemIndexSetExpected)
     }
 
-    func testSectionIndexesBasicThenCollection() {
+    func testIndexesOfSectionBasicThenCollection() {
         let basicSection: TestSection = .basic("1")
         let collectionSection: TestSection = .collection(["2", "3", "4"])
 
@@ -387,7 +387,7 @@ class SectionsTests: XCTestCase {
         XCTAssertEqual(collectionIndexesActual, collectionIndexesExpected)
     }
 
-    func testSectionIndexesCollectionThenBasic() {
+    func testIndexesOfSectionCollectionThenBasic() {
         let collectionSection: TestSection = .collection(["2", "3", "4"])
         let basicSection: TestSection = .basic("1")
 
@@ -405,7 +405,7 @@ class SectionsTests: XCTestCase {
         XCTAssertEqual(collectionIndexesActual, collectionIndexesExpected)
     }
 
-    func testSectionIndexesBasicThenCollectionThenBasic() {
+    func testIndexesOfSectionBasicThenCollectionThenBasic() {
         let firstSection: TestSection = .basic("1")
         let lastSection: TestSection = .basic("5")
         let collectionSection: TestSection = .collection(["2", "3", "4"])
@@ -429,7 +429,7 @@ class SectionsTests: XCTestCase {
         XCTAssertEqual(collectionIndexesActual, collectionIndexesExpected)
     }
 
-    func testSectionIndexesMultipleCollections() {
+    func testIndexesOfSectionMultipleCollections() {
         let firstCollectionSection: TestSection = .collection(["1", "2", "3"])
         let secondCollectionSection: TestSection = .collection(["4", "5", "6"])
 
@@ -445,6 +445,78 @@ class SectionsTests: XCTestCase {
         let secondCollectionIndexesActual: [Int]? = sections.indexes(of: secondCollectionSection)
         let secondCollectionIndexesExpected: [Int] = [3, 4, 5]
         XCTAssertEqual(secondCollectionIndexesActual, secondCollectionIndexesExpected)
+    }
+
+    // MARK: IndexPaths of item tests
+
+    func testIndexPathsOfItemBasic() {
+        let sections: Sections<TestSection, TestItem> = [
+            Section<TestSection, TestItem>(value: .basic("1"), items: [.basic("1"), .basic("2")]),
+            Section<TestSection, TestItem>(value: .basic("2"), items: [.basic("3"), .basic("4")])
+        ]
+
+        XCTAssertEqual(sections.indexPaths(of: .basic("1")), [IndexPath(item: 0, section: 0)])
+        XCTAssertEqual(sections.indexPaths(of: .basic("2")), [IndexPath(item: 1, section: 0)])
+
+        XCTAssertEqual(sections.indexPaths(of: .basic("3")), [IndexPath(item: 0, section: 1)])
+        XCTAssertEqual(sections.indexPaths(of: .basic("4")), [IndexPath(item: 1, section: 1)])
+    }
+
+    func testIndexPathsOfItemBasicThenCollection() {
+        let sections: Sections<TestSection, TestItem> = [
+            Section<TestSection, TestItem>(value: .basic("1"), items: [.basic("1"), .basic("2"), .collection(["3", "4"])]),
+            Section<TestSection, TestItem>(value: .basic("2"), items: [.basic("5"), .basic("6"), .collection(["7", "8"])])
+        ]
+
+        XCTAssertEqual(sections.indexPaths(of: .basic("1")), [IndexPath(item: 0, section: 0)])
+        XCTAssertEqual(sections.indexPaths(of: .basic("2")), [IndexPath(item: 1, section: 0)])
+        XCTAssertEqual(sections.indexPaths(of: .collection(["3", "4"])), [IndexPath(item: 2, section: 0), IndexPath(item: 3, section: 0)])
+
+        XCTAssertEqual(sections.indexPaths(of: .basic("5")), [IndexPath(item: 0, section: 1)])
+        XCTAssertEqual(sections.indexPaths(of: .basic("6")), [IndexPath(item: 1, section: 1)])
+        XCTAssertEqual(sections.indexPaths(of: .collection(["7", "8"])), [IndexPath(item: 2, section: 1), IndexPath(item: 3, section: 1)])
+    }
+
+    func testIndexPathsOfItemCollectionThenBasic() {
+        let sections: Sections<TestSection, TestItem> = [
+            Section<TestSection, TestItem>(value: .basic("1"), items: [.collection(["3", "4"]), .basic("1"), .basic("2")]),
+            Section<TestSection, TestItem>(value: .basic("2"), items: [.collection(["7", "8"]), .basic("5"), .basic("6")])
+        ]
+
+        XCTAssertEqual(sections.indexPaths(of: .collection(["3", "4"])), [IndexPath(item: 0, section: 0), IndexPath(item: 1, section: 0)])
+        XCTAssertEqual(sections.indexPaths(of: .basic("1")), [IndexPath(item: 2, section: 0)])
+        XCTAssertEqual(sections.indexPaths(of: .basic("2")), [IndexPath(item: 3, section: 0)])
+
+        XCTAssertEqual(sections.indexPaths(of: .collection(["7", "8"])), [IndexPath(item: 0, section: 1), IndexPath(item: 1, section: 1)])
+        XCTAssertEqual(sections.indexPaths(of: .basic("5")), [IndexPath(item: 2, section: 1)])
+        XCTAssertEqual(sections.indexPaths(of: .basic("6")), [IndexPath(item: 3, section: 1)])
+    }
+
+    func testIndexPathsOfItemBasicThenCollectionThenBasic() {
+        let sections: Sections<TestSection, TestItem> = [
+            Section<TestSection, TestItem>(value: .basic("1"), items: [.basic("1"), .basic("2"), .collection(["3", "4"]), .basic("5")]),
+            Section<TestSection, TestItem>(value: .basic("2"), items: [.basic("6"), .basic("7"), .collection(["8", "9"]), .basic("10")])
+        ]
+
+        XCTAssertEqual(sections.indexPaths(of: .basic("1")), [IndexPath(item: 0, section: 0)])
+        XCTAssertEqual(sections.indexPaths(of: .basic("2")), [IndexPath(item: 1, section: 0)])
+        XCTAssertEqual(sections.indexPaths(of: .collection(["3", "4"])), [IndexPath(item: 2, section: 0), IndexPath(item: 3, section: 0)])
+        XCTAssertEqual(sections.indexPaths(of: .basic("5")), [IndexPath(item: 4, section: 0)])
+
+        XCTAssertEqual(sections.indexPaths(of: .basic("6")), [IndexPath(item: 0, section: 1)])
+        XCTAssertEqual(sections.indexPaths(of: .basic("7")), [IndexPath(item: 1, section: 1)])
+        XCTAssertEqual(sections.indexPaths(of: .collection(["8", "9"])), [IndexPath(item: 2, section: 1), IndexPath(item: 3, section: 1)])
+        XCTAssertEqual(sections.indexPaths(of: .basic("10")), [IndexPath(item: 4, section: 1)])
+    }
+
+    func testIndexPathsOfItemMultipleCollections() {
+        let sections: Sections<TestSection, TestItem> = [
+            Section<TestSection, TestItem>(value: .basic("1"), items: [.collection(["1", "2"]), .collection(["3"]), .collection(["4"])])
+        ]
+
+        XCTAssertEqual(sections.indexPaths(of: .collection(["1", "2"])), [IndexPath(item: 0, section: 0), IndexPath(item: 1, section: 0)])
+        XCTAssertEqual(sections.indexPaths(of: .collection(["3"])), [IndexPath(item: 2, section: 0)])
+        XCTAssertEqual(sections.indexPaths(of: .collection(["4"])), [IndexPath(item: 3, section: 0)])
     }
 }
 // swiftlint:disable:this file_length
