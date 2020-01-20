@@ -32,7 +32,6 @@ public class SectionsArray<T>: ExpressibleByArrayLiteral {
     public required init(arrayLiteral elements: T...) {
         self.items = elements
     }
-
 }
 
 extension SectionsArray: _SectionsArray {

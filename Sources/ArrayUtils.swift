@@ -49,14 +49,14 @@ struct ArrayUtils {
         return result
     }
 
-    static func findIndexes<T: Equatable>(items: [T], itemToFind: T, itemCount: (T) -> Int) -> [Int]? {
+    static func findIndexes<T: SectionEquatable>(items: [T], itemToFind: T, itemCount: (T) -> Int) -> [Int]? {
         var currentItemIndex: Int = 0
 
         var resultIndexes: [Int]?
         for item in items {
             let countOfElementsInItem = itemCount(item)
 
-            if item == itemToFind {
+            if T.isEqual(lhs: item, rhs: itemToFind) {
                 resultIndexes = (currentItemIndex..<currentItemIndex+countOfElementsInItem).map { $0 }
                 break
             }

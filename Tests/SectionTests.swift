@@ -48,11 +48,11 @@ class SectionTests: XCTestCase {
     func testItemAtIndexBasic() {
         let section: Section<TestSection, TestItem> = Section(value: .basic(nil), items: [.basic("1"), .basic("2")])
 
-        let firstItemActual = section.item(at: 0)
+        let firstItemActual: TestItem = section.item(at: 0)
         let firstItemExpected: TestItem = .basic("1")
         XCTAssertEqual(firstItemActual, firstItemExpected)
 
-        let secondItemActual = section.item(at: 1)
+        let secondItemActual: TestItem = section.item(at: 1)
         let secondItemExpected: TestItem = .basic("2")
         XCTAssertEqual(secondItemActual, secondItemExpected)
     }
@@ -63,7 +63,7 @@ class SectionTests: XCTestCase {
 
         let section: Section<TestSection, TestItem> = Section(value: .basic(nil), items: [basicItem, collectionItem])
 
-        let firstBasicItemActual = section.item(at: 0)
+        let firstBasicItemActual: TestItem = section.item(at: 0)
         let firstBasicItemExpected: TestItem = .basic("1")
         XCTAssertEqual(firstBasicItemActual, firstBasicItemExpected)
 
@@ -78,7 +78,7 @@ class SectionTests: XCTestCase {
 
         let section: Section<TestSection, TestItem> = Section(value: .basic(nil), items: [collectionItem, basicItem])
 
-        let lastItemBasicActual = section.item(at: 3)
+        let lastItemBasicActual: TestItem = section.item(at: 3)
         let lastItemBasicExpected: TestItem = .basic("1")
         XCTAssertEqual(lastItemBasicActual, lastItemBasicExpected)
 
@@ -93,11 +93,11 @@ class SectionTests: XCTestCase {
 
         let section: Section<TestSection, TestItem> = Section(value: .basic(nil), items: [basicItem, collectionItem, basicItem])
 
-        let firstBasicItemActual = section.item(at: 0)
+        let firstBasicItemActual: TestItem = section.item(at: 0)
         let firstBasicItemExpected: TestItem = .basic("1")
         XCTAssertEqual(firstBasicItemActual, firstBasicItemExpected)
 
-        let lastItemBasicActual = section.item(at: 4)
+        let lastItemBasicActual: TestItem = section.item(at: 4)
         let lastItemBasicExpected: TestItem = .basic("1")
         XCTAssertEqual(lastItemBasicActual, lastItemBasicExpected)
 
@@ -119,5 +119,88 @@ class SectionTests: XCTestCase {
         XCTAssertEqual(TestUtils.getSectionArray(item: section[3]).item, "4")
         XCTAssertEqual(TestUtils.getSectionArray(item: section[4]).item, "5")
         XCTAssertEqual(TestUtils.getSectionArray(item: section[5]).item, "6")
+    }
+
+    // MARK: Indexes of item tests
+
+    func testIndexesOfItemBasic() {
+        let section: Section<TestSection, TestItem> = Section(value: .basic(nil), items: [.basic("1"), .basic("2")])
+
+        let firstItemIndexesActual: [Int]? = section.indexes(of: .basic("1"))
+        let firstItemIndexesExpected: [Int] = [0]
+        XCTAssertEqual(firstItemIndexesActual, firstItemIndexesExpected)
+
+        let secondItemIndexesActual: [Int]? = section.indexes(of: .basic("2"))
+        let secondItemIndexesExpected: [Int] = [1]
+        XCTAssertEqual(secondItemIndexesActual, secondItemIndexesExpected)
+    }
+
+    func testIndexesOfItemNotExists() {
+        let section: Section<TestSection, TestItem> = Section(value: .basic(nil), items: [.basic("1"), .basic("2")])
+
+        let firstItemIndexesActual: [Int]? = section.indexes(of: .basic("3"))
+        let firstItemIndexesExpected: [Int]? = nil
+        XCTAssertEqual(firstItemIndexesActual, firstItemIndexesExpected)
+    }
+
+    func testIndexesOfItemBasicThenCollection() {
+        let basicItem: TestItem = .basic("1")
+        let collectionItem: TestItem = .collection(["2", "3", "4"])
+        let section: Section<TestSection, TestItem> = Section(value: .basic(nil), items: [basicItem, collectionItem])
+
+        let firstItemIndexesActual: [Int]? = section.indexes(of: basicItem)
+        let firstItemIndexesExpected: [Int] = [0]
+        XCTAssertEqual(firstItemIndexesActual, firstItemIndexesExpected)
+
+        let collectionItemIndexesActual: [Int]? = section.indexes(of: collectionItem)
+        let collectionItemIndexesExpected: [Int] = [1, 2, 3]
+        XCTAssertEqual(collectionItemIndexesActual, collectionItemIndexesExpected)
+    }
+
+    func testIndexesOfItemCollectionThenBasic() {
+        let basicItem: TestItem = .basic("1")
+        let collectionItem: TestItem = .collection(["2", "3", "4"])
+        let section: Section<TestSection, TestItem> = Section(value: .basic(nil), items: [collectionItem, basicItem])
+
+        let lastItemIndexesActual: [Int]? = section.indexes(of: basicItem)
+        let lastItemIndexesExpected: [Int] = [3]
+        XCTAssertEqual(lastItemIndexesActual, lastItemIndexesExpected)
+
+        let collectionItemIndexesActual: [Int]? = section.indexes(of: collectionItem)
+        let collectionItemIndexesExpected: [Int] = [0, 1, 2]
+        XCTAssertEqual(collectionItemIndexesActual, collectionItemIndexesExpected)
+    }
+
+    func testIndexesOfItemBasicThenCollectionThenBasic() {
+        let firstBasicItem: TestItem = .basic("1")
+        let lastBasicItem: TestItem = .basic("5")
+        let collectionItem: TestItem = .collection(["2", "3", "4"])
+        let section: Section<TestSection, TestItem> = Section(value: .basic(nil), items: [firstBasicItem, collectionItem, lastBasicItem])
+
+        let firstItemIndexesActual: [Int]? = section.indexes(of: firstBasicItem)
+        let firstItemIndexesExpected: [Int] = [0]
+        XCTAssertEqual(firstItemIndexesActual, firstItemIndexesExpected)
+
+        let lastItemIndexesActual: [Int]? = section.indexes(of: lastBasicItem)
+        let lastItemIndexesExpected: [Int] = [4]
+        XCTAssertEqual(lastItemIndexesActual, lastItemIndexesExpected)
+
+        let collectionItemIndexesActual: [Int]? = section.indexes(of: collectionItem)
+        let collectionItemIndexesExpected: [Int] = [1, 2, 3]
+        XCTAssertEqual(collectionItemIndexesActual, collectionItemIndexesExpected)
+    }
+
+    func testIndexesOfItemMultipleCollections() {
+        let firstCollectionItem: TestItem = .collection(["1", "2", "3"])
+        let secondCollectionItem: TestItem = .collection(["4", "5", "6"])
+        let section: Section<TestSection, TestItem> = Section(value: .basic(nil), items: [firstCollectionItem, secondCollectionItem])
+
+        let firstCollectionItemIndexesActual: [Int]? = section.indexes(of: firstCollectionItem)
+        let firstCollectionItemIndexesExpected: [Int] = [0, 1, 2]
+        XCTAssertEqual(firstCollectionItemIndexesActual, firstCollectionItemIndexesExpected)
+
+        let secondCollectionItemIndexesActual: [Int]? = section.indexes(of: secondCollectionItem)
+        let secondCollectionItemIndexesExpected: [Int] = [3, 4, 5]
+        XCTAssertEqual(secondCollectionItemIndexesActual, secondCollectionItemIndexesExpected)
     }
 }

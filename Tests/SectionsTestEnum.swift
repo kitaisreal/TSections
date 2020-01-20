@@ -44,6 +44,13 @@ enum TestSection: Equatable {
     }
 }
 
+extension TestSection: SectionEquatable {
+
+    static func isEqual(lhs: TestSection, rhs: TestSection) -> Bool {
+        return lhs == rhs
+    }
+}
+
 enum TestItem: Equatable {
     case basic(String?)
     case collection(SectionsArray<String>)
@@ -62,5 +69,12 @@ enum TestItem: Equatable {
         }
 
         return result
+    }
+}
+
+extension TestItem: SectionEquatable {
+
+    static func isEqual(lhs: TestItem, rhs: TestItem) -> Bool {
+        return lhs == rhs
     }
 }

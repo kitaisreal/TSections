@@ -27,7 +27,6 @@ public struct Sections<S, T>: ExpressibleByArrayLiteral {
     public init(arrayLiteral elements: Section<S, T>...) {
         self.init(sections: elements)
     }
-
 }
 
 public extension Sections {
@@ -46,7 +45,6 @@ public extension Sections {
 
         return sectionWithOffset.item
     }
-
 }
 
 public struct ItemInSection<S, T> {
@@ -79,7 +77,7 @@ public extension Sections {
     }
 }
 
-public extension Sections where S: Equatable {
+public extension Sections where S: SectionEquatable {
 
     func indexSet(of sectionToFind: S) -> IndexSet? {
         let result: IndexSet?
@@ -101,7 +99,7 @@ public extension Sections where S: Equatable {
     }
 }
 
-public extension Sections where S: Equatable, T: Equatable {
+public extension Sections where S: SectionEquatable, T: SectionEquatable {
 
     func indexPaths(of item: T) -> [IndexPath]? {
         var currentSectionIndex: Int = 0

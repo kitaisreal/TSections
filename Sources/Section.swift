@@ -21,7 +21,6 @@ public struct Section<S, T> {
         self.items = items
         self.count = items.map({ ReflectionUtils.getSectionsArrayFromEnumIfExists(value: $0)?.count ?? 1 }).reduce(0, +)
     }
-
 }
 
 public extension Section {
@@ -41,7 +40,7 @@ public extension Section {
     }
 }
 
-public extension Section where T: Equatable {
+public extension Section where T: SectionEquatable {
 
     @inline(__always)
     func indexes(of itemToFind: T) -> [Int]? {

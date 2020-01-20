@@ -9,6 +9,7 @@
 import XCTest
 @testable import TSections
 
+// swiftlint:disable:next type_body_length
 class SectionsTests: XCTestCase {
 
     // MARK: Count tests
@@ -148,14 +149,6 @@ class SectionsTests: XCTestCase {
     }
 
     // MARK: Item at index path tests
-
-    private func getSectionArrayFromTestSection(value: TestSection) -> SectionsArray<String> {
-        guard case .collection(let sectionArray) = value else {
-            XCTFail("TestSection value is not collection")
-            return []
-        }
-        return sectionArray
-    }
 
     func testItemAtIndexPathBasic() {
         let sections: Sections<TestSection, TestItem> = [
@@ -331,104 +324,127 @@ class SectionsTests: XCTestCase {
         XCTAssertEqual(TestUtils.getSectionArray(item: sections[IndexPath(item: 1, section: 1)].section.value).item, "2")
     }
 
-    // MARK: Section indexes tests
+    // MARK: Indexes of section tests
 
-//    func testSectionIndexesBasic() {
-//        let firstSection: TestSection = .basic("1")
-//        let secondSection: TestSection = .basic("2")
-//
-//        let sections: Sections<TestSection, TestItem> = [
-//            Section<TestSection, TestItem>(value: firstSection, items: []),
-//            Section<TestSection, TestItem>(value: secondSection, items: [])
-//        ]
-//
-//        let actualFirstItemIndexes = sections.indexes(of: firstSection)
-//        let expectedFirstItemIndexes = [0]
-//        XCTAssertEqual(actualFirstItemIndexes, expectedFirstItemIndexes)
-//
-//        let actualSecondItemIndexes = sections.indexes(of: secondSection)
-//        let expectedSecondItemIndexes = [1]
-//        XCTAssertEqual(actualSecondItemIndexes, expectedSecondItemIndexes)
-//
-//        let actualFirstItemIndexSet = sections.indexSet(of: firstSection)
-//        let expectedFirstItemIndexSet: IndexSet = [0]
-//        XCTAssertEqual(actualFirstItemIndexSet, expectedFirstItemIndexSet)
-//
-//        let actualSecondItemIndexSet = sections.indexSet(of: secondSection)
-//        let expectedSecondItemIndexSet: IndexSet = [1]
-//        XCTAssertEqual(actualSecondItemIndexSet, expectedSecondItemIndexSet)
-//    }
-//
-//    func testSectionIndexesEmpty() {
-//        let firstSection: TestSection = .basic("1")
-//        let secondSection: TestSection = .basic("2")
-//
-//        let sections: Sections<TestSection, TestItem> = [
-//            Section<TestSection, TestItem>(value: firstSection, items: [])
-//        ]
-//
-//        let actualSecondItemIndexes = sections.indexes(of: secondSection)
-//        let expectedSecondItemIndexes: [Int]? = nil
-//        XCTAssertEqual(actualSecondItemIndexes, expectedSecondItemIndexes)
-//
-//        let actualSecondItemIndexSet = sections.indexSet(of: secondSection)
-//        let expectedSecondItemIndexSet: IndexSet? = nil
-//        XCTAssertEqual(actualSecondItemIndexSet, expectedSecondItemIndexSet)
-//    }
+    func testSectionIndexesBasic() {
+        let firstSection: TestSection = .basic("1")
+        let secondSection: TestSection = .basic("2")
 
-//    func testSectionIndexesBasicThenCollection() {
-//        let itemSection: TestSection = .basic("1")
-//        let collectionSection: TestSection = .collection(["2", "3", "4"])
-//
-//        let sections: Sections<TestSection, TestItem> = [
-//            Section<TestSection, TestItem>(section: itemSection, items: []),
-//            Section<TestSection, TestItem>(section: collectionSection, items: [])
-//        ]
-//
-//        let actualItemIndexes = sections.indexes(of: itemSection)
-//        let expectedItemIndexes = [0]
-//        XCTAssertEqual(actualItemIndexes, expectedItemIndexes)
-//
-//        let actualCollectionIndexes = sections.indexes(of: collectionSection)
-//        let expectedCollectionIndexes = (itemSection.countOfElements..<collectionSection.countOfElements + itemSection.countOfElements).map { $0 }
-//        XCTAssertEqual(actualCollectionIndexes, expectedCollectionIndexes)
-//
-//        let actualItemIndexSet = sections.indexSet(of: itemSection)
-//        let expectedItemIndexSet: IndexSet = [0]
-//        XCTAssertEqual(actualItemIndexSet, expectedItemIndexSet)
+        let sections: Sections<TestSection, TestItem> = [
+            Section<TestSection, TestItem>(value: firstSection, items: []),
+            Section<TestSection, TestItem>(value: secondSection, items: [])
+        ]
 
-//        let actualCollectionIndexSet = sections.indexSet(of: collectionSection)
-//        let expectedCollectionIndexSet: IndexSet = (itemSection.countOfElements..<collectionSection.countOfElements + itemSection.countOfElements).map { $0 }
-//        XCTAssertEqual(actualCollectionIndexSet, expectedCollectionIndexSet)
-//    }
+        let firstItemIndexesExpected: [Int]? = sections.indexes(of: firstSection)
+        let firstItemIndexesActual: [Int] = [0]
+        XCTAssertEqual(firstItemIndexesExpected, firstItemIndexesActual)
 
-//    func testSectionIndexesBasicThenCollectionThenBasic() {
-//        let firstSection: TestSection = .basic("1")
-//        let collectionSection: TestSection = .collection(["2", "3", "4"])
-//        let lastSection: TestSection = .basic("5")
-//
-//        let sections: Sections<TestSection, TestItem> = [
-//            Section<TestSection, TestItem>(section: firstSection, items: []),
-//            Section<TestSection, TestItem>(section: collectionSection, items: [])
-//        ]
-//
-//        let actualFirstSectionIndexes = sections.indexes(of: firstSection)
-//        let expectedFirstSectionIndexes = [0]
-//        XCTAssertEqual(actualFirstSectionIndexes, expectedFirstSectionIndexes)
-//
-//        let actualCollectionIndexes = sections.indexes(of: collectionSection)
-//        let expectedCollectionIndexes = (firstSection.countOfElements..<collectionSection.countOfElements + firstSection.countOfElements).map { $0 }
-//        XCTAssertEqual(actualCollectionIndexes, expectedCollectionIndexes)
-//
-//        let actualLastItemIndexes = sections.indexSet(of: lastSection)
-//        let expectedLastSectionIndexes = [collectionSection.countOfElements + firstSection.countOfElements]
-//
-//        let actualFirstItemIndexSet = sections.indexSet(of: firstSection)
-//        let expectedItemIndexSet: IndexSet = [0]
-//        XCTAssertEqual(actualFirstItemIndexSet, expectedItemIndexSet)
+        let secondItemIndexesActual: [Int]? = sections.indexes(of: secondSection)
+        let secondItemIndexesExpected: [Int] = [1]
+        XCTAssertEqual(secondItemIndexesActual, secondItemIndexesExpected)
 
-//        let actualCollectionIndexSet = sections.indexSet(of: collectionSection)
-//        let expectedCollectionIndexSet: IndexSet = (firstSection.countOfElements..<collectionSection.countOfElements + firstSection.countOfElements).map { $0 }
-//        XCTAssertEqual(actualCollectionIndexSet, expectedCollectionIndexSet)
-//    }
+        let firstItemIndexSetActual: IndexSet? = sections.indexSet(of: firstSection)
+        let firstItemIndexSetExpected: IndexSet = [0]
+        XCTAssertEqual(firstItemIndexSetActual, firstItemIndexSetExpected)
+
+        let secondItemIndexSetActual: IndexSet? = sections.indexSet(of: secondSection)
+        let secondItemIndexSetExpected: IndexSet = [1]
+        XCTAssertEqual(secondItemIndexSetActual, secondItemIndexSetExpected)
+    }
+
+    func testSectionIndexesNotExists() {
+        let firstSection: TestSection = .basic("1")
+        let secondSection: TestSection = .basic("2")
+
+        let sections: Sections<TestSection, TestItem> = [
+            Section<TestSection, TestItem>(value: firstSection, items: [])
+        ]
+
+        let secondItemIndexesActual: [Int]? = sections.indexes(of: secondSection)
+        let secondItemIndexesExpected: [Int]? = nil
+        XCTAssertEqual(secondItemIndexesActual, secondItemIndexesExpected)
+
+        let secondItemIndexSetActual: IndexSet? = sections.indexSet(of: secondSection)
+        let secondItemIndexSetExpected: IndexSet? = nil
+        XCTAssertEqual(secondItemIndexSetActual, secondItemIndexSetExpected)
+    }
+
+    func testSectionIndexesBasicThenCollection() {
+        let basicSection: TestSection = .basic("1")
+        let collectionSection: TestSection = .collection(["2", "3", "4"])
+
+        let sections: Sections<TestSection, TestItem> = [
+            Section<TestSection, TestItem>(value: basicSection, items: []),
+            Section<TestSection, TestItem>(value: collectionSection, items: [])
+        ]
+
+        let itemIndexesActual: [Int]? = sections.indexes(of: basicSection)
+        let itemIndexesExpected: [Int] = [0]
+        XCTAssertEqual(itemIndexesActual, itemIndexesExpected)
+
+        let collectionIndexesActual: [Int]? = sections.indexes(of: collectionSection)
+        let collectionIndexesExpected: [Int] = [1, 2, 3]
+        XCTAssertEqual(collectionIndexesActual, collectionIndexesExpected)
+    }
+
+    func testSectionIndexesCollectionThenBasic() {
+        let collectionSection: TestSection = .collection(["2", "3", "4"])
+        let basicSection: TestSection = .basic("1")
+
+        let sections: Sections<TestSection, TestItem> = [
+            Section<TestSection, TestItem>(value: collectionSection, items: []),
+            Section<TestSection, TestItem>(value: basicSection, items: [])
+        ]
+
+        let itemIndexesActual: [Int]? = sections.indexes(of: basicSection)
+        let itemIndexesExpected: [Int] = [3]
+        XCTAssertEqual(itemIndexesActual, itemIndexesExpected)
+
+        let collectionIndexesActual: [Int]? = sections.indexes(of: collectionSection)
+        let collectionIndexesExpected: [Int] = [0, 1, 2]
+        XCTAssertEqual(collectionIndexesActual, collectionIndexesExpected)
+    }
+
+    func testSectionIndexesBasicThenCollectionThenBasic() {
+        let firstSection: TestSection = .basic("1")
+        let lastSection: TestSection = .basic("5")
+        let collectionSection: TestSection = .collection(["2", "3", "4"])
+
+        let sections: Sections<TestSection, TestItem> = [
+            Section<TestSection, TestItem>(value: firstSection, items: []),
+            Section<TestSection, TestItem>(value: collectionSection, items: []),
+            Section<TestSection, TestItem>(value: lastSection, items: [])
+        ]
+
+        let firstItemIndexesActual: [Int]? = sections.indexes(of: firstSection)
+        let firstItemIndexesExpected: [Int] = [0]
+        XCTAssertEqual(firstItemIndexesActual, firstItemIndexesExpected)
+
+        let lastItemIndexesActual: [Int]? = sections.indexes(of: lastSection)
+        let lastItemIndexesExpected: [Int] = [4]
+        XCTAssertEqual(lastItemIndexesActual, lastItemIndexesExpected)
+
+        let collectionIndexesActual: [Int]? = sections.indexes(of: collectionSection)
+        let collectionIndexesExpected: [Int] = [1, 2, 3]
+        XCTAssertEqual(collectionIndexesActual, collectionIndexesExpected)
+    }
+
+    func testSectionIndexesMultipleCollections() {
+        let firstCollectionSection: TestSection = .collection(["1", "2", "3"])
+        let secondCollectionSection: TestSection = .collection(["4", "5", "6"])
+
+        let sections: Sections<TestSection, TestItem> = [
+            Section<TestSection, TestItem>(value: firstCollectionSection, items: []),
+            Section<TestSection, TestItem>(value: secondCollectionSection, items: [])
+        ]
+
+        let firstCollectionIndexesActual: [Int]? = sections.indexes(of: firstCollectionSection)
+        let firstCollectionIndexesExpected: [Int] = [0, 1, 2]
+        XCTAssertEqual(firstCollectionIndexesActual, firstCollectionIndexesExpected)
+
+        let secondCollectionIndexesActual: [Int]? = sections.indexes(of: secondCollectionSection)
+        let secondCollectionIndexesExpected: [Int] = [3, 4, 5]
+        XCTAssertEqual(secondCollectionIndexesActual, secondCollectionIndexesExpected)
+    }
 }
+// swiftlint:disable:this file_length

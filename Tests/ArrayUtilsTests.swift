@@ -11,7 +11,7 @@ import XCTest
 
 class ArrayUtilsTests: XCTestCase {
 
-    private enum ArrayUtilEnum: Equatable {
+    private enum ArrayUtilEnum: Equatable, SectionEquatable {
         case item(Int, String)
 
         var countOfElements: Int {
@@ -36,6 +36,10 @@ class ArrayUtilsTests: XCTestCase {
             }
 
             return result
+        }
+
+        static func isEqual(lhs: Self, rhs: Self) -> Bool {
+            return lhs == rhs
         }
     }
 
@@ -153,7 +157,7 @@ class ArrayUtilsTests: XCTestCase {
         XCTAssertEqual(secondItemIndexes, [1])
     }
 
-    func testFindIndexesEmpty() {
+    func testFindIndexesNotExists() {
         let firstItem: ArrayUtilEnum = .item(1, "1")
         let secondItem: ArrayUtilEnum = .item(1, "2")
 
@@ -185,15 +189,15 @@ class ArrayUtilsTests: XCTestCase {
 
         let items: [ArrayUtilEnum] = [basicFirstItem, collectionItem]
 
-        let actualItemIndexes = ArrayUtils.findIndexes(items: items, itemToFind: basicFirstItem, itemCount: { $0.countOfElements })
-        let expectedItemIndexes = [0]
+        let itemIndexesActual = ArrayUtils.findIndexes(items: items, itemToFind: basicFirstItem, itemCount: { $0.countOfElements })
+        let itemIndexesExpected = [0]
 
-        XCTAssertEqual(actualItemIndexes, expectedItemIndexes)
+        XCTAssertEqual(itemIndexesActual, itemIndexesExpected)
 
-        let actualCollectionIndexes = ArrayUtils.findIndexes(items: items, itemToFind: collectionItem, itemCount: { $0.countOfElements })
-        let expectedCollectionIndexes = (basicFirstItem.countOfElements..<collectionCount+basicFirstItem.countOfElements).map { $0 }
+        let collectionIndexesActual = ArrayUtils.findIndexes(items: items, itemToFind: collectionItem, itemCount: { $0.countOfElements })
+        let collectionIndexesExpected = (basicFirstItem.countOfElements..<collectionCount+basicFirstItem.countOfElements).map { $0 }
 
-        XCTAssertEqual(actualCollectionIndexes, expectedCollectionIndexes)
+        XCTAssertEqual(collectionIndexesActual, collectionIndexesExpected)
     }
 
     func testFindIndexesBasicThenCollectionThenBasic() {
@@ -205,20 +209,20 @@ class ArrayUtilsTests: XCTestCase {
 
         let items: [ArrayUtilEnum] = [basicFirstItem, collectionItem, basicLastItem]
 
-        let actualFirstItemIndexes = ArrayUtils.findIndexes(items: items, itemToFind: basicFirstItem, itemCount: { $0.countOfElements })
-        let expectedFirstItemIndexes = [0]
+        let firstItemIndexesActual = ArrayUtils.findIndexes(items: items, itemToFind: basicFirstItem, itemCount: { $0.countOfElements })
+        let firstItemIndexesExpected = [0]
 
-        XCTAssertEqual(actualFirstItemIndexes, expectedFirstItemIndexes)
+        XCTAssertEqual(firstItemIndexesActual, firstItemIndexesExpected)
 
-        let actualLastItemIndexes = ArrayUtils.findIndexes(items: items, itemToFind: basicLastItem, itemCount: { $0.countOfElements })
-        let expectedLastItemIndexes = [collectionCount+basicFirstItem.countOfElements]
+        let lastItemIndexesActual = ArrayUtils.findIndexes(items: items, itemToFind: basicLastItem, itemCount: { $0.countOfElements })
+        let lastItemIndexesExpected = [collectionCount+basicFirstItem.countOfElements]
 
-        XCTAssertEqual(actualLastItemIndexes, expectedLastItemIndexes)
+        XCTAssertEqual(lastItemIndexesActual, lastItemIndexesExpected)
 
-        let actualCollectionIndexes = ArrayUtils.findIndexes(items: items, itemToFind: collectionItem, itemCount: { $0.countOfElements })
-        let expectedCollectionIndexes = (basicFirstItem.countOfElements..<collectionCount+basicFirstItem.countOfElements).map { $0 }
+        let collectionIndexesActual = ArrayUtils.findIndexes(items: items, itemToFind: collectionItem, itemCount: { $0.countOfElements })
+        let collectionIndexesExpected = (basicFirstItem.countOfElements..<collectionCount+basicFirstItem.countOfElements).map { $0 }
 
-        XCTAssertEqual(actualCollectionIndexes, expectedCollectionIndexes)
+        XCTAssertEqual(collectionIndexesActual, collectionIndexesExpected)
     }
 
     func testFindIndexesMultipleCollections() {
@@ -230,14 +234,14 @@ class ArrayUtilsTests: XCTestCase {
 
         let items: [ArrayUtilEnum] = [firstCollection, secondCollection]
 
-        let actualFirstItemIndexes = ArrayUtils.findIndexes(items: items, itemToFind: firstCollection, itemCount: { $0.countOfElements })
-        let expectedFirstItemIndexes = (0..<firstCollectionCount).map { $0 }
+        let firstItemIndexesActual = ArrayUtils.findIndexes(items: items, itemToFind: firstCollection, itemCount: { $0.countOfElements })
+        let firstItemIndexesExpected = (0..<firstCollectionCount).map { $0 }
 
-        XCTAssertEqual(actualFirstItemIndexes, expectedFirstItemIndexes)
+        XCTAssertEqual(firstItemIndexesActual, firstItemIndexesExpected)
 
-        let actualSecondItemIndexes = ArrayUtils.findIndexes(items: items, itemToFind: secondCollection, itemCount: { $0.countOfElements })
-        let expectedSecondItemIndexes = (firstCollectionCount..<firstCollectionCount+secondCollectionCount).map { $0 }
+        let secondItemIndexesActual = ArrayUtils.findIndexes(items: items, itemToFind: secondCollection, itemCount: { $0.countOfElements })
+        let secondItemIndexesExpected = (firstCollectionCount..<firstCollectionCount+secondCollectionCount).map { $0 }
 
-        XCTAssertEqual(actualSecondItemIndexes, expectedSecondItemIndexes)
+        XCTAssertEqual(secondItemIndexesActual, secondItemIndexesExpected)
     }
 }
