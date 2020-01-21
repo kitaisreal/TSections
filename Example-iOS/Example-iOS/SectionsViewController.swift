@@ -39,11 +39,13 @@ class SectionsViewController: UIViewController {
 
     private lazy var sections: Sections<DemoSections, DemoItem> = [
         Section(value: .headerSection, items: [.valueCell("Header Section")]),
-        Section(value: .subheaderSection(["Subheader First Header", "Subheader Second Header"]),
-                items: [.valueCell("Subheader Section")]),
+        Section(value: .subheaderSection(["Subheader First Header",
+                                          "Subheader Second Header"]), items: [.valueCell("Subheader Section")]),
         Section(value: .mainSection, items: [.valueCell("Main Section Begin"),
-                                               .collectionCell(["First", "Second", "Third"]),
-                                               .valueCell("Main Section End")]),
+                                             .collectionCell(["First main section item",
+                                                              "Second main section item",
+                                                              "Third main section item"]),
+                                             .valueCell("Main Section End")]),
         Section(value: .footerSection, items: [.valueCell("Footer Section")])
     ]
 
@@ -121,8 +123,9 @@ extension SectionsViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let section = sections.section(at: indexPath.section).value
-        let item = sections[indexPath]
+        let itemInSection = sections.itemInSection(at: indexPath)
+        let section = itemInSection.section.value
+        let item = itemInSection.item
 
         let resultHeight: CGFloat
 
@@ -130,12 +133,14 @@ extension SectionsViewController: UITableViewDelegate, UITableViewDataSource {
 
         case (.headerSection, _):
             resultHeight = 120.0
-        case (.mainSection, _):
+        case (.mainSection, .valueCell):
+            resultHeight = 140.0
+        case (.mainSection, .collectionCell):
             resultHeight = 48.0
         case (.subheaderSection, _):
             resultHeight = 84.0
         case (.footerSection, _):
-            resultHeight = 120.0
+            resultHeight = 64.0
         }
 
         return resultHeight

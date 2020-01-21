@@ -99,7 +99,7 @@ public extension Sections where S: SectionEquatable {
     }
 }
 
-public extension Sections where S: SectionEquatable, T: SectionEquatable {
+public extension Sections where T: SectionEquatable {
 
     func indexPaths(of item: T) -> [IndexPath]? {
         var currentSectionIndex: Int = 0
